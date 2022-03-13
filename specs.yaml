@@ -1,0 +1,45 @@
+openapi: "2"
+info:
+  title: API Title
+  version: "1.0"
+servers:
+  - url: http://127.0.0.1
+paths:
+  /stat:
+    get:
+      summary: "Get all statistics"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/delayReason"
+        500:
+          description: Server error
+  /count/{localeSlug}:
+    post:
+      summary: "Update counter by local slug"
+      parameters:
+        - name: "localeSlug"
+          in: path
+          description: "country code, ISO 639-1"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: OK
+        400:
+          description: Country code is not valid
+        500:
+          description: Server error
+
+definitions:
+  delayReason:
+    type: object
+    additionalProperties:
+      type: string
+      properties:
+        "count":
+          type: int
+    example:
+      ru: 1,
+      fr: 2,
