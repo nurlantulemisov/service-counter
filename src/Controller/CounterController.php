@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nurlantulemisov\ServiceCounter\Controller;
 
+use DomainException;
 use Nurlantulemisov\ServiceCounter\ReadModel\CountryStat;
 use Nurlantulemisov\ServiceCounter\Service\CounterService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,9 +21,13 @@ class CounterController
         $this->counterService = $counterService;
     }
 
-    public function count(Request $request): Response
+    public function stat(Request $request): Response
     {
-        $stats = $this->counterService->getStats();
+        try {
+            $stats = $this->counterService->getStats();
+        } catch (DomainException $exception) {
+            return new JsonResponse(['message' => 'Server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         $response = [];
         array_walk($stats, static function (CountryStat $stat) use (&$response) {
@@ -37,7 +42,12 @@ class CounterController
         if (!$isValidLanguage) {
             return new JsonResponse(['message' => 'Country code not exist'], Response::HTTP_BAD_REQUEST);
         }
-        $this->counterService->updateCount($localeSlug);
+        try {
+            $this->counterService->updateCount($localeSlug);
+        } catch (DomainException $exception) {
+            return new JsonResponse(['message' => 'Server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
         return new JsonResponse(['message' => 'OK']);
     }
 }

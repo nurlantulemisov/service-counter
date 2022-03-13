@@ -19,19 +19,23 @@ class CounterService
         $this->container = $container;
     }
 
+    /**
+     * @throws DomainException
+     */
     public function updateCount(string $locale): void
     {
         try {
             $updater = $this->container->get(CountUpdater::class);
             $updater($locale);
         } catch (NotFoundExceptionInterface | ContainerExceptionInterface | DomainException $e) {
-            print_r($e->getMessage());
-            exit;
+            throw new DomainException($e->getMessage());
         }
     }
 
     /**
      * @return CountryStat[]
+     *
+     * @throws DomainException
      */
     public function getStats(): array
     {
@@ -39,8 +43,7 @@ class CounterService
             $supplier = $this->container->get(CountSupplier::class);
             return $supplier();
         } catch (NotFoundExceptionInterface | ContainerExceptionInterface | DomainException $e) {
-            print_r($e->getMessage());
-            exit;
+            throw new DomainException($e->getMessage());
         }
     }
 }
