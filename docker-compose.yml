@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/:/etc/nginx/conf.d
+      - .:/var/www
+      - ./logs/nginx:/var/log/nginx
+    # nginx должен общаться с php контейнером
+    links:
+      - php
+  php:
+    build: ./build/.
+    volumes:
+      - .:/var/www
+    links:
+      - redis
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6382:6379"
