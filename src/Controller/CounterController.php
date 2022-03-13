@@ -21,4 +21,10 @@ class CounterController
     {
         return new Response('count: ' . $this->counterService->getCount($request->headers->get('user-hash')));
     }
+
+    public function update(Request $request, string $localeSlug): Response
+    {
+        $this->counterService->updateCount($localeSlug);
+        return new Response();
+    }
 }

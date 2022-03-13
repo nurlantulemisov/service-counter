@@ -1,10 +1,9 @@
 <?php
 
 use Nurlantulemisov\ServiceCounter\Controller\CounterController;
-use Nurlantulemisov\ServiceCounter\Controller\TestController;
 use Nurlantulemisov\ServiceCounter\Listner\UserListener;
 use Nurlantulemisov\ServiceCounter\Service\CounterService;
-use Nurlantulemisov\ServiceCounter\Service\TestService;
+use Nurlantulemisov\ServiceCounter\Service\CountUpdater;
 use Nurlantulemisov\ServiceCounter\Service\UserService;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\Cache\Adapter\RedisTagAwareAdapter;
@@ -30,8 +29,11 @@ return static function (ContainerBuilder $container) {
     $container->register(UserService::class, UserService::class)
         ->setArguments([$cache]);
 
+    $container->register(CountUpdater::class, CountUpdater::class)
+        ->setArguments([$cache])->setPublic(true);
+
     $container->register(CounterService::class, CounterService::class)
-        ->setArguments([$cache]);
+        ->setArguments([new Reference('service_container'), $cache]);
 
     $container->register(UserListener::class, UserListener::class)
         ->addTag('kernel.event_listener', ['event' => 'kernel.request'])
@@ -43,4 +45,5 @@ return static function (ContainerBuilder $container) {
         ->setArguments([new Reference(CounterService::class)])
         ->setAutoconfigured(true)
         ->setPublic(true);
+
 };
