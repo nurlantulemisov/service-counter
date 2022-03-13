@@ -21,6 +21,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader as DIPhpFileLoader;
 
+\Locale::setDefault('en'); // set default locale for symfony lib
+
 // Load DI
 $file = __DIR__ . '/tmp/di-cached/container.php';
 $containerConfigCache = new ConfigCache($file, false);
@@ -60,7 +62,6 @@ $matcher = new UrlMatcher($routes, $context);
  * @var $dispatcher EventDispatcher
  */
 $dispatcher = $container->get('event_dispatcher');
-// ... add some event listeners
 
 $controllerResolver = new ContainerControllerResolver($container);
 $argumentResolver = new ArgumentResolver();

@@ -23,7 +23,7 @@ class CountUpdater
     public function __invoke(string $locale): void
     {
         try {
-            $cacheItem = $this->cache->getItem('count-' . $locale);
+            $cacheItem = $this->cache->getItem($locale);
         } catch (InvalidArgumentException $e) {
             throw new DomainException('Нельзя обновить данные');
         }

@@ -3,6 +3,7 @@
 use Nurlantulemisov\ServiceCounter\Controller\CounterController;
 use Nurlantulemisov\ServiceCounter\Listner\UserListener;
 use Nurlantulemisov\ServiceCounter\Service\CounterService;
+use Nurlantulemisov\ServiceCounter\Service\CountSupplier;
 use Nurlantulemisov\ServiceCounter\Service\CountUpdater;
 use Nurlantulemisov\ServiceCounter\Service\UserService;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
@@ -30,6 +31,9 @@ return static function (ContainerBuilder $container) {
         ->setArguments([$cache]);
 
     $container->register(CountUpdater::class, CountUpdater::class)
+        ->setArguments([$cache])->setPublic(true);
+
+    $container->register(CountSupplier::class, CountSupplier::class)
         ->setArguments([$cache])->setPublic(true);
 
     $container->register(CounterService::class, CounterService::class)
