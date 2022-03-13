@@ -25,7 +25,7 @@ class CountUpdater
         try {
             $cacheItem = $this->cache->getItem($locale);
         } catch (InvalidArgumentException $e) {
-            throw new DomainException('Нельзя обновить данные');
+            throw new DomainException($e->getMessage());
         }
 
         $count = 0;

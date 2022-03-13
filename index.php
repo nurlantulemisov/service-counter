@@ -74,7 +74,7 @@ $kernel = new HttpKernel($dispatcher, $controllerResolver, $requests, $argumentR
 try {
     $response = $kernel->handle($request);
 } catch (Exception $exception) {
-    $response = new Response($exception->getMessage(), 500);
+    $response = new Response($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
 }
 
 // send the headers and echo the content

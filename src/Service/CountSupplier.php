@@ -33,7 +33,7 @@ class CountSupplier
         try {
             $items = $this->cache->getItems($keys);
         } catch (InvalidArgumentException $e) {
-            throw new DomainException('Нельзя получить данные');
+            throw new DomainException($e->getMessage());
         }
 
         $stats = [];
