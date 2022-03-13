@@ -9,7 +9,7 @@ use Nurlantulemisov\ServiceCounter\ReadModel\CountryStat;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
-use Symfony\Component\Intl\Languages;
+use Symfony\Component\Intl\Countries;
 
 class CountSupplier
 {
@@ -27,8 +27,8 @@ class CountSupplier
      */
     public function __invoke(): array
     {
-        $languages = array_keys(Languages::getNames());
-        $keys = array_map(static fn(string $locale): string => $locale, $languages);
+        $countries = array_keys(Countries::getNames());
+        $keys = array_map(static fn(string $locale): string => mb_strtolower($locale), $countries);
 
         try {
             $items = $this->cache->getItems($keys);
